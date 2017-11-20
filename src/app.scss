@@ -1,0 +1,40 @@
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: ($spacer * .25),
+  2: ($spacer * .5),
+  3: ($spacer * .75),
+  4: $spacer,
+  5: ($spacer * 1.25),
+  6: ($spacer * 1.5),
+  7: ($spacer * 1.75),
+  8: ($spacer * 2),
+  9: ($spacer * 2.5),
+  10: ($spacer * 3),
+) !default;
+
+@import "~normalize.css/normalize";
+@import '~bootstrap/scss/_functions';
+@import '~bootstrap/scss/_variables';
+@import '~bootstrap/scss/_mixins';
+@import '~bootstrap/scss/_grid';
+@import '~bootstrap/scss/utilities/flex';
+@import '~bootstrap/scss/utilities/visibility';
+@import '~bootstrap/scss/utilities/display';
+@import '~bootstrap/scss/utilities/text';
+@import '~bootstrap/scss/utilities/spacing';
+@import '~bootstrap/scss/utilities/sizing';
+
+@import url('https://fonts.googleapis.com/css?family=Barlow');
+
+html {
+  font-family: 'Barlow', sans-serif;
+}
+
+.rel {
+  position: relative;
+}
+
+.coin-info-wrapper {
+  border-top: 1px solid black;
+}

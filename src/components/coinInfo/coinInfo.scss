@@ -1,0 +1,15 @@
+.coin__icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.coin__icon-positive {
+  border-width: 0 10px 15px 10px;
+  border-color: transparent transparent #04ff00 transparent;
+}
+
+.coin__icon-negative {
+  border-width: 15px 10px 0 10px;
+  border-color: #ff0000 transparent transparent transparent;
+}
