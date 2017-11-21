@@ -26,12 +26,8 @@
     props: {
       coins: {
         type: Array,
-        required: false,
         default() {
           return [];
-        },
-        validator(value) {
-          return Array.isArray(value);
         },
       },
     },

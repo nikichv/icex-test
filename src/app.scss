@@ -38,3 +38,10 @@ html {
 .coin-info-wrapper {
   border-top: 1px solid black;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0
+}

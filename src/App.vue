@@ -8,11 +8,11 @@
     ></coin-list>
 
     <div class="d-flex flex-column rel w-100">
-      <div class="w-100">
-        <chart :history="currentCoinHistory"></chart>
+      <div class="w-75 mx-auto">
+        <chart :history="currentCoinHistory" :fetching="isFetchingHistory"></chart>
       </div>
       <div class="coin-info-wrapper">
-        <coin-info :coin="currentCoinInfo"></coin-info>
+        <coin-info :coin="currentCoinDetails"></coin-info>
       </div>
     </div>
 
@@ -20,20 +20,19 @@
 </template>
 
 <script>
-  import chart from '@/components/chart/index';
-  import coinList from '@/components/coinList/index';
-  import coinInfo from '@/components/coinInfo/index';
+  import { mapActions, mapState } from 'vuex';
+  import get from 'lodash.get';
 
-  import { getCoinByName, getCoinHistory, getCoinsList } from '@/api/endpoints/coins';
+  import chart from '@/components/chart';
+  import coinList from '@/components/coinList';
+  import coinInfo from '@/components/coinInfo';
 
   export default {
     name: 'app',
     data() {
       return {
         currentCoin: null,
-        coinsList: [],
-        coinsDetails: {},
-        coinsHistory: {},
+        isFetchingHistory: false,
       };
     },
     components: {
@@ -43,66 +42,56 @@
     },
     watch: {
       currentCoin(name) {
-        this.fetchCoinInfo(name);
-        this.fetchCoinHistory(name, {
-          interval: 'day',
-          end: this.getUnixRange(30).end,
-          start: this.getUnixRange(30).start,
-        });
+        if (!this.coinsHistory[name]) {
+          this.isFetchingHistory = true;
+
+          this.fetchCoinHistory({
+            name: this.currentCoin,
+            options: {
+              interval: 'day',
+              start: this.getUnixRange(30).start,
+              end: this.getUnixRange(30).end,
+            },
+          }).then(() => { this.isFetchingHistory = false; });
+        }
+
+        if (!this.coinsDetails[name]) {
+          this.fetchCoinByName(name);
+        }
       },
     },
     methods: {
-      fetchCoinInfo(name) {
-        getCoinByName(name)
-          .then((response) => {
-            if (response.data.result) {
-              const data = {};
-              data[name] = response.data.data;
-              this.coinsDetails = Object.assign({}, this.coinsDetails, data);
-            }
-          });
-      },
-      fetchCoinHistory(name, options) {
-        getCoinHistory(name, options)
-          .then((response) => {
-            if (response.data.result) {
-              const data = {};
-              data[name] = response.data.data;
-              this.coinsHistory = Object.assign({}, this.coinsHistory, data);
-            }
-          });
-      },
+      ...mapActions([
+        'fetchCoinsList',
+        'fetchCoinHistory',
+        'fetchCoinByName',
+      ]),
       getUnixRange(days) {
-        const end = Math.floor(+Date.now() / 1000); // returns unix timestamp in seconds
-        const start = (() => {
-          const date = new Date();
-          return Math.floor(date.setDate(date.getDate() - days) / 1000);
-        })();
+        const date = new Date();
+        const end = Math.floor(Date.now() / 1000); // returns unix timestamp in seconds
+        const start = Math.floor(date.setDate(date.getDate() - days) / 1000);
 
         return { end, start };
       },
     },
     computed: {
-      currentCoinInfo() {
-        return this.coinsDetails[this.currentCoin];
+      ...mapState({
+        coinsList: state => state.coins.list,
+        coinsDetails: state => state.coins.details,
+        coinsHistory: state => state.coins.histories,
+      }),
+      currentCoinDetails() {
+        return get(this.coinsDetails, this.currentCoin, undefined);
       },
       currentCoinHistory() {
-        return this.coinsHistory[this.currentCoin];
+        return get(this.coinsHistory, this.currentCoin, undefined);
       },
     },
     created() {
-      getCoinsList('icextop10')
+      this.fetchCoinsList('icextop10')
         .then((response) => {
           if (response.data.result && response.data.data.length > 0) {
-            this.coinsList = response.data.data;
             this.currentCoin = response.data.data[0];
-
-            this.fetchCoinInfo(this.currentCoin);
-            this.fetchCoinHistory(this.currentCoin, {
-              interval: 'day',
-              end: this.getUnixRange(30).end,
-              start: this.getUnixRange(30).start,
-            });
           }
         });
     },

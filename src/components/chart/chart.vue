@@ -12,13 +12,13 @@
     props: {
       history: {
         type: Array,
-        required: false,
         default() {
           return [];
         },
-        validator(value) {
-          return Array.isArray(value);
-        },
+      },
+      fetching: {
+        type: Boolean,
+        required: true,
       },
     },
     data() {
@@ -29,18 +29,20 @@
     watch: {
       history(value) {
         if (value.length > 0) {
-          this.hc.showLoading('Loading');
-          console.log(value);
           this.hc.series[0].setData(this.parseHistory(value));
-          this.hc.hideLoading();
         }
+      },
+      fetching(value) {
+        return value
+          ? this.hc.showLoading('Loading')
+          : this.hc.hideLoading();
       },
     },
     methods: {
       parseHistory(arr) {
         return arr.map(el => [el.timestamp * 1000, el.value]);
       },
-      init() {
+      initHighchart() {
         this.hc = Highcharts.stockChart('chart', {
           chart: {
             margin: 0,
@@ -51,12 +53,18 @@
           rangeSelector: {
             buttons: [],
             inputEnabled: false,
+            labelStyle: {
+              visibility: 'hidden',
+            },
+          },
+          xAxis: {
+            tickInterval: 24 * 3600 * 1000,
           },
         });
       },
     },
     mounted() {
-      this.init();
+      this.initHighchart();
     },
   };
 </script>

@@ -1,33 +1,35 @@
 <template>
   <div>
-    <template v-if="coin">
-      <div class="d-flex justify-content-around align-items-center">
-        <p class="text-uppercase font-weight-bold">
-          {{ coin.name}} ({{ coin.short}})
-        </p>
-        <p>Price: {{ coin.price_usd }}$</p>
-        <div class="d-flex align-items-end">
-          <i :class="['coin__icon mr-2', defineChangeIconClass()]"></i>
-          <span>{{ coin.change.day }}</span>
+    <transition appear name="fade">
+      <template v-if="coin">
+        <div class="d-flex justify-content-around align-items-center">
+          <p class="text-uppercase font-weight-bold">
+            {{ coin.name}} ({{ coin.short }})
+          </p>
+          <p>Price: {{ coin.price_usd }}$</p>
+          <div class="d-flex align-items-end">
+            <i :class="['coin__icon mr-2', defineChangeIconClass()]"></i>
+            <span>{{ coin.change.day }}</span>
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
+    </transition>
   </div>
 </template>
 
 <script>
-  const coinDefaultKeys = ['name', 'short', 'price_usd', 'change'];
+  import get from 'lodash.get';
+
+  const coinDefaultKeys = ['name', 'short', 'price_usd', 'change.day'];
 
   export default {
     name: 'coin-info',
     props: {
       coin: {
         type: Object,
-        required: false,
         validator(value) {
-          return Object.keys(value).some(key => coinDefaultKeys.includes(key));
+          return coinDefaultKeys.every(el => get(value, el, false));
         },
-        default: null,
       },
     },
     methods: {
