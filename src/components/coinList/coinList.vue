@@ -5,7 +5,10 @@
       <div class="d-flex flex-wrap coin__list">
         <template v-if="stateReady">
           <template v-for="coin in coins">
-            <div :class="['coin__list-item mx-2 p-2', '']" @click="updateCurrentCoin(coin)">
+            <div
+              :class="['coin__list-item mx-2 p-2', { 'coin__list-item--active' : active === coin }]"
+              @click="updateCurrentCoin(coin)"
+            >
               <span>{{ coin }}</span>
             </div>
           </template>
@@ -29,6 +32,9 @@
         default() {
           return [];
         },
+      },
+      active: {
+        type: String,
       },
     },
     methods: {

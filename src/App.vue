@@ -3,6 +3,7 @@
 
     <coin-list
       :coins="coinsList"
+      :active="currentCoin"
       @coinset="currentCoin = $event"
       style="flex-shrink: 0;"
     ></coin-list>
