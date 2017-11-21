@@ -31,6 +31,11 @@ html {
   font-family: 'Barlow', sans-serif;
 }
 
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .rel {
   position: relative;
 }

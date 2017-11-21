@@ -10,7 +10,7 @@ export function getCoinsList(list) {
 
 export function getCoinByName(name) {
   if (!name) {
-    throw new SyntaxError('Coin name must be specified!');
+    throw new Error('Coin name must be specified!');
   }
 
   return httpClient.get(`coins/${name}`);
@@ -18,7 +18,7 @@ export function getCoinByName(name) {
 
 export function getCoinHistory(name, options) {
   if (!name) {
-    throw new SyntaxError('Coin name must be specified!');
+    throw new Error('Coin name must be specified!');
   }
 
   const path = `coins/${name}/hist?${qs.stringify(options)}`;

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="d-flex" style="min-height: 100vh; height: 100%;">
+  <div id="app" class="d-flex flex-column" style="height: 100%;">
 
     <coin-list
       :coins="coinsList"
@@ -7,8 +7,8 @@
       style="flex-shrink: 0;"
     ></coin-list>
 
-    <div class="d-flex flex-column rel w-100">
-      <div class="w-75 mx-auto">
+    <div class="d-flex flex-column rel w-100 h-100">
+      <div class="w-100 mx-auto">
         <chart :history="currentCoinHistory" :fetching="isFetchingHistory"></chart>
       </div>
       <div class="coin-info-wrapper">
@@ -42,6 +42,12 @@
     },
     watch: {
       currentCoin(name) {
+        /* да-да, я знаю, что это не самый
+        классный ход не обновлять данные,
+        если они у нас уже есть. Но поскольку
+        график у нас по дням идет, то думаю обновлением
+        данных в этом случае можно пренебречь.
+         */
         if (!this.coinsHistory[name]) {
           this.isFetchingHistory = true;
 

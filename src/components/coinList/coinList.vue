@@ -2,10 +2,10 @@
   <div>
     <div class="px-3">
       <h2><strong>Coins list</strong></h2>
-      <div class="d-flex flex-column coin__list">
+      <div class="d-flex flex-wrap coin__list">
         <template v-if="stateReady">
           <template v-for="coin in coins">
-            <div :class="['coin__list-item mb-2 p-2', '']" @click="updateCurrentCoin(coin)">
+            <div :class="['coin__list-item mx-2 p-2', '']" @click="updateCurrentCoin(coin)">
               <span>{{ coin }}</span>
             </div>
           </template>
