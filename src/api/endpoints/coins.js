@@ -1,4 +1,4 @@
-import httpClient from '../index';
+import httpClient from '../provider';
 
 export function getCoinsList(list) {
   const path = list ? `coins?coinlist=${list}` : 'coins';

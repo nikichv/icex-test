@@ -1,7 +1,3 @@
-import axios from 'axios';
+import { getCoinByName, getCoinHistory, getCoinsList } from './endpoints/coins';
 
-const httpClient = axios.create({
-  baseURL: process.env.API_ROOT,
-});
-
-export default httpClient;
+export { getCoinByName, getCoinHistory, getCoinsList };

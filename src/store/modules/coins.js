@@ -1,4 +1,4 @@
-import { getCoinsList, getCoinHistory, getCoinByName } from '@/api/endpoints/coins';
+import { getCoinsList, getCoinHistory, getCoinByName } from '@/api';
 
 const initialState = {
   list: [],
