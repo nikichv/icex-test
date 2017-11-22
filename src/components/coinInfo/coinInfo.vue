@@ -28,7 +28,7 @@
       coin: {
         type: Object,
         validator(value) {
-          /* я знаю, что любое falsy значение уронить эту валидацию
+          /* я знаю, что любое falsy значение уронит эту валидацию
           но для тестового задания думаю сойдет.
            */
           return coinDefaultKeys.every(el => get(value, el, false));

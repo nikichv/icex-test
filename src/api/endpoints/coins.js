@@ -1,5 +1,3 @@
-import qs from 'querystring';
-
 import httpClient from '../index';
 
 export function getCoinsList(list) {
@@ -21,9 +19,9 @@ export function getCoinHistory(name, options) {
     throw new Error('Coin name must be specified!');
   }
 
-  const path = `coins/${name}/hist?${qs.stringify(options)}`;
-
-  return httpClient.get(path);
+  return httpClient.get(`coins/${name}/hist?`, {
+    params: options,
+  });
 }
 
 export default { getCoinByName, getCoinHistory, getCoinsList };
