@@ -4,7 +4,7 @@
     <coin-list
       :coins="coinsList"
       :active="currentCoin"
-      @coinset="currentCoin = $event"
+      @coinset="setCurrentCoin($event)"
       style="flex-shrink: 0;"
     ></coin-list>
 
@@ -41,8 +41,22 @@
       coinList,
       coinInfo,
     },
-    watch: {
-      currentCoin(name) {
+    methods: {
+      ...mapActions([
+        'fetchCoinsList',
+        'fetchCoinHistory',
+        'fetchCoinByName',
+      ]),
+      getUnixRange(days) {
+        const date = new Date();
+        const end = Math.floor(Date.now() / 1000); // returns unix timestamp in seconds
+        const start = Math.floor(date.setDate(date.getDate() - days) / 1000);
+
+        return { end, start };
+      },
+      setCurrentCoin(name) {
+        this.currentCoin = name;
+
         /* да-да, я знаю, что это не самый
         классный ход не обновлять данные,
         если они у нас уже есть. Но поскольку
@@ -67,20 +81,6 @@
         }
       },
     },
-    methods: {
-      ...mapActions([
-        'fetchCoinsList',
-        'fetchCoinHistory',
-        'fetchCoinByName',
-      ]),
-      getUnixRange(days) {
-        const date = new Date();
-        const end = Math.floor(Date.now() / 1000); // returns unix timestamp in seconds
-        const start = Math.floor(date.setDate(date.getDate() - days) / 1000);
-
-        return { end, start };
-      },
-    },
     computed: {
       ...mapState({
         coinsList: state => state.coins.list,
@@ -98,7 +98,7 @@
       this.fetchCoinsList('icextop10')
         .then((response) => {
           if (response.data.result && response.data.data.length > 0) {
-            this.currentCoin = response.data.data[0];
+            this.setCurrentCoin(response.data.data[0]);
           }
         });
     },
